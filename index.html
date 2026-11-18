@@ -1,1625 +1,982 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ED Solutions — Custom Software for Small Business</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --primary: #4F46E5;
-            --primary-light: #818CF8;
-            --primary-dark: #3730A3;
-            --accent: #06B6D4;
-            --accent-light: #67E8F9;
-            --dark: #0F172A;
-            --dark-light: #1E293B;
-            --gray: #64748B;
-            --gray-light: #94A3B8;
-            --light: #F8FAFC;
-            --white: #FFFFFF;
-            --gradient: linear-gradient(135deg, #4F46E5, #06B6D4);
-            --gradient-dark: linear-gradient(135deg, #1E1B4B, #0F172A);
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            color: var(--dark);
-            background: var(--white);
-            overflow-x: hidden;
-        }
-
-        /* ===== NAVBAR ===== */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
-            padding: 0.6rem 0;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            text-decoration: none;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo span {
-            -webkit-text-fill-color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after { width: 100%; }
-        .nav-links a:hover { color: var(--primary); }
-
-        .nav-cta {
-            background: var(--gradient) !important;
-            color: var(--white) !important;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600 !important;
-            transition: transform 0.3s, box-shadow 0.3s !important;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
-        }
-
-        .nav-cta::after { display: none !important; }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 2.5px;
-            background: var(--dark);
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            background: var(--gradient-dark);
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-
-        .hero-bg .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .hero-bg .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: var(--primary);
-            top: -200px;
-            right: -100px;
-        }
-
-        .hero-bg .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent);
-            bottom: -100px;
-            left: -50px;
-            animation-delay: -3s;
-        }
-
-        .hero-bg .orb-3 {
-            width: 300px;
-            height: 300px;
-            background: #8B5CF6;
-            top: 50%;
-            left: 40%;
-            animation-delay: -5s;
-        }
-
-        .grid-overlay {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.05); }
-            66% { transform: translate(-20px, 20px) scale(0.95); }
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .hero-text { color: var(--white); }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            color: var(--accent-light);
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .hero-badge .dot {
-            width: 8px;
-            height: 8px;
-            background: #34D399;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .hero h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero h1 .highlight {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--gray-light);
-            line-height: 1.7;
-            margin-bottom: 2rem;
-            max-width: 500px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.85rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: var(--white);
-            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.5);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: translateY(-3px);
-        }
-
-        .hero-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .code-window {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            backdrop-filter: blur(20px);
-            width: 100%;
-            max-width: 480px;
-            overflow: hidden;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .code-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 1rem 1.2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .code-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .code-dot.red { background: #EF4444; }
-        .code-dot.yellow { background: #F59E0B; }
-        .code-dot.green { background: #22C55E; }
-
-        .code-body {
-            padding: 1.5rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            line-height: 1.8;
-            color: var(--gray-light);
-        }
-
-        .code-body .keyword { color: #C084FC; }
-        .code-body .function { color: #60A5FA; }
-        .code-body .string { color: #34D399; }
-        .code-body .comment { color: #475569; }
-        .code-body .bracket { color: #F59E0B; }
-
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat p {
-            font-size: 0.85rem;
-            color: var(--gray-light);
-            margin: 0;
-        }
-
-        /* ===== SECTIONS COMMON ===== */
-        section { padding: 6rem 0; }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-tag {
-            display: inline-block;
-            background: rgba(79, 70, 229, 0.1);
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .section-header h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        /* ===== SERVICES ===== */
-        #services { background: var(--light); }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2.5rem;
-            transition: all 0.4s;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-        }
-
-        .service-card:hover::before { transform: scaleX(1); }
-
-        .service-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            background: rgba(79, 70, 229, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.25rem;
-            margin-bottom: 0.8rem;
-            color: var(--dark);
-        }
-
-        .service-card p {
-            color: var(--gray);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-
-        /* ===== ABOUT ===== */
-        #about { background: var(--white); }
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-image {
-            position: relative;
-        }
-
-        .about-card {
-            background: var(--gradient-dark);
-            border-radius: 24px;
-            padding: 3rem;
-            color: var(--white);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .about-card::before {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(60px);
-            opacity: 0.3;
-            top: -50px;
-            right: -50px;
-        }
-
-        .about-card .profile-icon {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .about-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .about-card .role {
-            color: var(--accent-light);
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-        }
-
-        .about-card .contact-row {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            color: var(--gray-light);
-            font-size: 0.9rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .about-text h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .about-text p {
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .about-features {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .about-features li {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.6rem 0;
-            color: var(--dark);
-            font-weight: 500;
-        }
-
-        .about-features li .check {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(34, 197, 94, 0.1);
-            color: #22C55E;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            flex-shrink: 0;
-        }
-
-        /* ===== PROCESS ===== */
-        #process { background: var(--light); }
-
-        .process-steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            position: relative;
-        }
-
-        .process-steps::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 12.5%;
-            right: 12.5%;
-            height: 2px;
-            background: var(--gradient);
-            opacity: 0.3;
-        }
-
-        .step {
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--white);
-            border: 3px solid var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            position: relative;
-            z-index: 2;
-            transition: all 0.3s;
-        }
-
-        .step:hover .step-number {
-            background: var(--gradient);
-            color: var(--white);
-            border-color: transparent;
-            transform: scale(1.1);
-        }
-
-        .step h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .step p {
-            color: var(--gray);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* ===== WHY CHOOSE US ===== */
-        #why { background: var(--dark); color: var(--white); }
-
-        #why .section-tag {
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--accent-light);
-        }
-
-        #why .section-header h2 { color: var(--white); }
-        #why .section-header p { color: var(--gray-light); }
-
-        .why-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .why-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s;
-        }
-
-        .why-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-4px);
-        }
-
-        .why-card .icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .why-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.15rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .why-card p {
-            color: var(--gray-light);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        /* ===== TESTIMONIALS ===== */
-        #testimonials { background: var(--white); }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .testimonial-card {
-            background: var(--light);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .testimonial-card:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .stars {
-            color: #F59E0B;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .testimonial-card blockquote {
-            color: var(--gray);
-            line-height: 1.7;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .testimonial-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .testimonial-author h4 {
-            font-size: 0.95rem;
-            color: var(--dark);
-        }
-
-        .testimonial-author p {
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-
-        /* ===== CTA ===== */
-        .cta-section {
-            background: var(--gradient-dark);
-            padding: 6rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(100px);
-            opacity: 0.2;
-            top: -100px;
-            right: -100px;
-        }
-
-        .cta-content {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            color: var(--white);
-        }
-
-        .cta-content h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta-content p {
-            color: var(--gray-light);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-white {
-            background: var(--white);
-            color: var(--primary-dark);
-            font-weight: 700;
-        }
-
-        .btn-white:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        /* ===== CONTACT ===== */
-        #contact { background: var(--light); }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .contact-info h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info > p {
-            color: var(--gray);
-            line-height: 1.7;
-            margin-bottom: 2rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background: rgba(79, 70, 229, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-        }
-
-        .contact-item h4 {
-            font-size: 0.95rem;
-            margin-bottom: 0.2rem;
-            color: var(--dark);
-        }
-
-        .contact-item p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .contact-item a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .contact-item a:hover { text-decoration: underline; }
-
-        .contact-form {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-            color: var(--dark);
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            transition: border-color 0.3s;
-            background: var(--white);
-            color: var(--dark);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .form-group textarea { resize: vertical; min-height: 120px; }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .btn-submit {
-            width: 100%;
-            justify-content: center;
-            font-size: 1rem;
-            padding: 1rem;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            background: var(--dark);
-            color: var(--gray-light);
-            padding: 4rem 0 2rem;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-brand .logo {
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-
-        .footer-brand p {
-            color: var(--gray);
-            line-height: 1.7;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 0.8rem;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray-light);
-            text-decoration: none;
-            transition: all 0.3s;
-            font-size: 1.1rem;
-        }
-
-        .social-links a:hover {
-            background: var(--primary);
-            color: var(--white);
-            transform: translateY(-3px);
-        }
-
-        .footer-col h4 {
-            color: var(--white);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .footer-col ul {
-            list-style: none;
-        }
-
-        .footer-col li { margin-bottom: 0.7rem; }
-
-        .footer-col a {
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-
-        .footer-col a:hover { color: var(--white); }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-        }
-
-        /* ===== SCROLL ANIMATION ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===== MOBILE ===== */
-        @media (max-width: 1024px) {
-            .hero-content { grid-template-columns: 1fr; text-align: center; }
-            .hero p { margin: 0 auto 2rem; }
-            .hero-buttons { justify-content: center; }
-            .hero-stats { justify-content: center; }
-            .hero-visual { display: none; }
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .process-steps { grid-template-columns: repeat(2, 1fr); }
-            .process-steps::before { display: none; }
-            .about-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                flex-direction: column;
-                padding: 1.5rem 2rem;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                gap: 1rem;
-            }
-
-            .nav-links.active { display: flex; }
-
-            .hamburger { display: flex; }
-
-            .hero h1 { font-size: 2.2rem; }
-            .services-grid { grid-template-columns: 1fr; }
-            .testimonials-grid { grid-template-columns: 1fr; }
-            .why-grid { grid-template-columns: 1fr; }
-            .contact-grid { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-            .process-steps { grid-template-columns: 1fr; }
-            .hero-stats { gap: 1.5rem; }
-            .stat h3 { font-size: 1.5rem; }
-            .footer-grid { grid-template-columns: 1fr; }
-            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-            .cta-content h2 { font-size: 1.8rem; }
-        }
-
-        /* ===== WHATSAPP FLOAT ===== */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #25D366;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-            text-decoration: none;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-            z-index: 999;
-            transition: all 0.3s;
-            animation: bounce 2s infinite;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Fee &amp; Shop Billing Software in Puducherry | ED Solutions</title>
+<meta name="description" content="School fee billing, mark entry &amp; rank card software, grocery POS and restaurant billing in Tamil and English. Built in Puducherry for schools and shops across Tamil Nadu. Free demo.">
+<meta name="keywords" content="school fee billing software, mark entry software, rank card software, school software Tamil Nadu, billing software Puducherry, grocery billing software Tamil, kirana billing software, provisions POS, restaurant billing software Puducherry, canteen billing software, Tamil billing software, custom software Puducherry, Cuddalore">
+<meta name="author" content="Thomas Alva Edison Sarazin M">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://thomasalvaedisonsarazin.github.io/EDCloudSolution/">
+<meta name="theme-color" content="#16202E">
+<meta name="geo.region" content="IN-PY">
+<meta name="geo.placename" content="Puducherry">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2316202E'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='700' fill='%23F6F1E7' text-anchor='middle'%3EED%3C/text%3E%3C/svg%3E">
+
+<!-- Open Graph: how the link looks when shared on WhatsApp / Facebook / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ED Solutions">
+<meta property="og:locale" content="en_IN">
+<meta property="og:url" content="https://thomasalvaedisonsarazin.github.io/EDCloudSolution/">
+<meta property="og:title" content="ED Solutions — Software for Schools, Shops &amp; Restaurants in Tamil Nadu">
+<meta property="og:description" content="Fee billing, mark entry &amp; rank cards, grocery POS and restaurant billing — in Tamil and English. Free demo before you pay.">
+<meta property="og:image" content="https://thomasalvaedisonsarazin.github.io/EDCloudSolution/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ED Solutions — software for schools, shops and restaurants">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ED Solutions — Software for Schools, Shops &amp; Restaurants">
+<meta name="twitter:description" content="Fee billing, mark entry, grocery POS and restaurant billing in Tamil and English. Puducherry.">
+<meta name="twitter:image" content="https://thomasalvaedisonsarazin.github.io/EDCloudSolution/og-image.png">
+
+<!-- Structured data: tells Google who you are, where you work and what you sell -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "ProfessionalService",
+   "@id": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/#business",
+   "name": "ED Solutions",
+   "url": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/",
+   "image": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/og-image.png",
+   "description": "Custom software for schools, shops and restaurants in Tamil Nadu: school fee billing, mark entry and rank cards, grocery POS and restaurant billing, in Tamil and English.",
+   "telephone": "+91-97916-31215",
+   "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Puducherry",
+    "addressRegion": "Puducherry",
+    "addressCountry": "IN"
+   },
+   "areaServed": [
+    {
+     "@type": "City",
+     "name": "Puducherry"
+    },
+    {
+     "@type": "City",
+     "name": "Cuddalore"
+    },
+    {
+     "@type": "City",
+     "name": "Villupuram"
+    },
+    {
+     "@type": "City",
+     "name": "Chennai"
+    },
+    {
+     "@type": "State",
+     "name": "Tamil Nadu"
+    }
+   ],
+   "knowsLanguage": [
+    "ta",
+    "en"
+   ],
+   "founder": {
+    "@id": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/#founder"
+   },
+   "sameAs": [
+    "https://github.com/thomasalvaedisonsarazin"
+   ],
+   "makesOffer": [
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "SoftwareApplication",
+      "name": "School Fee Billing Software",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, Android"
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "SoftwareApplication",
+      "name": "Mark Entry & Rank Card System",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web, Android"
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "SoftwareApplication",
+      "name": "Grocery & Provisions Billing (POS)",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web"
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "SoftwareApplication",
+      "name": "Restaurant & Canteen Billing Software",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web"
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "MobileApplication",
+      "name": "Personal Teacher Assistant for 10th",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Android"
+     }
+    }
+   ]
+  },
+  {
+   "@type": "Person",
+   "@id": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/#founder",
+   "name": "Thomas Alva Edison Sarazin M",
+   "jobTitle": "Founder & Developer",
+   "worksFor": {
+    "@id": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/#business"
+   },
+   "sameAs": [
+    "https://github.com/thomasalvaedisonsarazin"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/#website",
+   "url": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/",
+   "name": "ED Solutions",
+   "inLanguage": "en-IN",
+   "publisher": {
+    "@id": "https://thomasalvaedisonsarazin.github.io/EDCloudSolution/#business"
+   }
+  }
+ ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --paper:#F6F1E7; --paper-2:#EFE7D8; --card:#FFFDF8;
+    --ink:#16202E; --ink-2:#3A4556; --muted:#6B7280; --line:#E2D8C6;
+    --accent:#D9542B; --accent-2:#B8411C; --accent-soft:#F7DCCF;
+    --green:#1F7A4D; --green-soft:#D7EEDF;
+    --blue:#24508F; --blue-soft:#DCE6F5;
+    --amber:#9A6500; --amber-soft:#F6E7C4;
+    --grey-soft:#E9E5DD;
+    --radius:14px;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--accent)}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.015em;line-height:1.12}
+  h2{font-size:clamp(30px,4vw,44px);margin:14px 0 14px}
+  .lead{font-size:18px;color:var(--ink-2);max-width:640px}
+  section{padding:96px 0}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(246,241,231,.86);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+  .nav.scrolled{border-bottom-color:var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+  .mark{width:38px;height:38px;border-radius:10px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:-.04em}
+  .brand b{font-family:var(--serif);font-size:20px;font-weight:600}
+  .brand small{display:block;font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em;margin-top:-2px}
+  .nav-links{display:flex;gap:30px;align-items:center;list-style:none}
+  .nav-links a{text-decoration:none;font-size:14.5px;font-weight:500;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--accent-2)}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid var(--ink);transition:transform .15s,background .15s,color .15s;cursor:pointer;font-family:var(--sans)}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-dark{background:var(--ink);color:var(--paper)}
+  .btn-dark:hover{background:var(--accent-2);border-color:var(--accent-2)}
+  .btn-ghost{background:transparent;color:var(--ink)}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn-wa{background:#1F7A4D;border-color:#1F7A4D;color:#fff}
+  .btn-wa:hover{background:#17603C;border-color:#17603C}
+  .nav .btn{padding:10px 18px;font-size:14px}
+  .nav-links a.btn{color:var(--paper)}
+  .nav-links a.btn:hover{color:#fff}
+  .burger{display:none;background:none;border:0;cursor:pointer;width:40px;height:40px}
+  .burger span{display:block;width:22px;height:2px;background:var(--ink);margin:5px auto;transition:.2s}
+
+  /* HERO */
+  .hero{padding:72px 0 64px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+  .hero h1{font-size:clamp(40px,6vw,70px);margin:18px 0 22px}
+  .hero h1 em{font-style:italic;color:var(--accent-2)}
+  .hero .lead{font-size:19px}
+  .ta-line{margin-top:14px;font-size:15px;color:var(--muted)}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
+  .tag{font-family:var(--mono);font-size:12px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-2)}
+
+  /* Receipt visual */
+  .receipt{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:26px 26px 30px;font-family:var(--mono);font-size:13px;box-shadow:0 30px 60px -30px rgba(22,32,46,.35);transform:rotate(1.6deg);position:relative}
+  .receipt::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:linear-gradient(-45deg,transparent 7px,var(--card) 0) 0 0/14px 14px,linear-gradient(45deg,transparent 7px,var(--card) 0) 0 0/14px 14px;background-repeat:repeat-x}
+  .receipt .rh{text-align:center;border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:12px}
+  .receipt .rh b{font-family:var(--serif);font-size:19px;display:block}
+  .receipt .ta{font-family:var(--sans);font-size:12px;color:var(--muted)}
+  .receipt .row{display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)}
+  .receipt .row.tot{border-top:1px dashed var(--line);margin-top:10px;padding-top:10px;font-weight:600;color:var(--ink);font-size:14px}
+  .receipt .stamp{display:inline-block;margin:16px 0 0 4px;border:2px solid var(--green);color:var(--green);font-weight:600;border-radius:6px;padding:4px 10px;transform:rotate(-12deg);font-size:12px;letter-spacing:.08em;opacity:.85}
+  .receipt .alert{margin-top:14px;background:var(--accent-soft);color:var(--accent-2);border-radius:6px;padding:8px 10px;font-size:12px}
+
+  /* STRIP */
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper-2)}
+  .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:28px 20px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:0}
+  .stat b{font-family:var(--serif);font-size:34px;font-weight:600;display:block;line-height:1}
+  .stat span{font-size:14px;color:var(--ink-2);display:block;margin-top:8px}
+
+  /* PRODUCTS */
+  .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:48px}
+  .prod{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:30px;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+  .prod:hover{transform:translateY(-4px);box-shadow:0 22px 44px -28px rgba(22,32,46,.4)}
+  .prod.feature{grid-column:span 2;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .prod.feature .p-desc,.prod.feature li{color:#C9CFD8}
+  .prod.feature .p-for{color:#F2B29A}
+  .p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px}
+  .p-icon{width:46px;height:46px;border-radius:12px;background:var(--paper-2);display:grid;place-items:center;font-size:22px}
+  .prod.feature .p-icon{background:#26324A}
+  .prod h3{font-size:25px;margin-bottom:6px}
+  .p-for{font-size:13.5px;font-weight:600;color:var(--accent-2);margin-bottom:12px}
+  .p-desc{color:var(--ink-2);font-size:15.5px}
+  .prod ul{list-style:none;margin:18px 0 0;display:grid;gap:8px}
+  .prod li{font-size:14.5px;color:var(--ink-2);padding-left:22px;position:relative}
+  .prod li::before{content:"";position:absolute;left:2px;top:9px;width:10px;height:6px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+  .p-actions{margin-top:auto;padding-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+  .p-actions a{font-size:14px;font-weight:600;text-decoration:none;padding:9px 15px;border-radius:999px;border:1.5px solid currentColor}
+  .p-actions a:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .prod.feature .p-actions a:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+  .pta-phone{align-self:center;justify-self:center;width:230px;height:440px;border-radius:34px;background:#0C131E;padding:12px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+  .pta-screen{height:100%;border-radius:24px;background:#F4F1EA;padding:18px 14px;color:var(--ink);font-size:12px;display:flex;flex-direction:column;gap:10px}
+  .pta-screen .hi{font-family:var(--serif);font-size:17px;font-weight:600}
+  .pta-screen .sub{color:var(--muted);font-size:11px;margin-top:-6px}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+  .tile{border-radius:12px;padding:12px 10px;font-weight:600;height:72px;display:flex;flex-direction:column;justify-content:space-between}
+  .tile small{font-weight:500;font-size:10px;opacity:.75}
+  .t1{background:#E6D8C4}.t2{background:#CFDDD3}.t3{background:#D5DCE9}.t4{background:#E9D3CF}.t5{background:#DDD6E6}.t6{background:#E3E1CC}
+  .bar{height:6px;background:#E2DCCF;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;width:62%;background:var(--green)}
+
+  /* BADGES */
+  .badge{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.04em;padding:5px 10px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+  .b-live{background:var(--green-soft);color:var(--green)}
+  .b-dev{background:var(--amber-soft);color:var(--amber)}
+  .b-proto{background:var(--blue-soft);color:var(--blue)}
+  .b-open{background:var(--grey-soft);color:var(--ink-2)}
+  .prod.feature .badge.b-dev{background:#3A3420;color:#F1CD7A}
+
+  /* PROJECTS */
+  #projects{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px}
+  .filters button{font-family:var(--sans);font-size:14px;font-weight:500;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);cursor:pointer}
+  .filters button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+  .proj{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:10px;transition:transform .2s,border-color .2s}
+  .proj:hover{transform:translateY(-3px);border-color:var(--ink-2)}
+  .proj.hide{display:none}
+  .proj .row1{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .proj .cat{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  .proj h3{font-size:20px}
+  .proj p{font-size:14.5px;color:var(--ink-2)}
+  .stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .stack span{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:6px;background:var(--paper-2);color:var(--ink-2)}
+  .proj .go{margin-top:auto;padding-top:8px;font-size:14px;font-weight:600;text-decoration:none;color:var(--accent-2);display:inline-flex;align-items:center;gap:6px}
+  .proj .go:hover{text-decoration:underline}
+  .proj .go.muted{color:var(--muted)}
+  .gh-note{margin-top:26px;font-size:14px;color:var(--muted)}
+  .gh-note a{color:var(--accent-2);font-weight:600}
+
+  /* SERVICES */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+  .svc{padding:30px 28px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .svc .n{font-family:var(--mono);font-size:12px;color:var(--accent-2)}
+  .svc h3{font-size:21px;margin:10px 0 8px}
+  .svc p{font-size:15px;color:var(--ink-2)}
+
+  /* PROCESS */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:44px;counter-reset:s}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;position:relative}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:var(--serif);font-size:38px;font-weight:600;color:var(--accent);display:block;line-height:1;margin-bottom:14px}
+  .step h3{font-size:19px;margin-bottom:6px}
+  .step p{font-size:14.5px;color:var(--ink-2)}
+
+  /* ABOUT */
+  .about{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+  .who{background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:32px}
+  .avatar{width:84px;height:84px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-family:var(--serif);font-size:32px;font-weight:600;color:#fff;margin-bottom:18px}
+  .who h3{font-size:24px}
+  .who .role{color:#C9CFD8;font-size:14.5px;margin:4px 0 20px}
+  .who dl{display:grid;gap:12px;font-size:14.5px}
+  .who dt{font-family:var(--mono);font-size:11px;color:#9AA4B2;text-transform:uppercase;letter-spacing:.08em}
+  .who dd a{color:#fff;text-decoration:none;border-bottom:1px solid #4A5568}
+  .about-text p{font-size:17px;color:var(--ink-2);margin-bottom:16px}
+  .about-text p strong{color:var(--ink)}
+  .points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+  .point{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;font-size:14.5px}
+  .point b{display:block;font-size:15.5px;margin-bottom:2px}
+
+  /* CONTACT */
+  #contact{background:var(--ink);color:var(--paper)}
+  #contact .eyebrow{color:#F2B29A}
+  #contact .lead{color:#C9CFD8}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px}
+  .c-list{display:grid;gap:14px}
+  .c-item{display:flex;gap:16px;align-items:center;padding:18px 20px;border:1px solid #2E3A4E;border-radius:12px;text-decoration:none;transition:background .15s,border-color .15s}
+  .c-item:hover{background:#1F2A3B;border-color:#46536A}
+  .c-ic{width:44px;height:44px;border-radius:10px;background:#26324A;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .c-item small{display:block;font-family:var(--mono);font-size:11px;color:#9AA4B2;text-transform:uppercase;letter-spacing:.08em}
+  .c-item b{font-weight:600;font-size:16px;word-break:break-all}
+  form{background:#1C2636;border:1px solid #2E3A4E;border-radius:var(--radius);padding:28px;display:grid;gap:14px}
+  form h3{font-size:22px}
+  form p.hint{font-size:13.5px;color:#9AA4B2;margin-top:-6px}
+  label{font-size:13px;font-weight:600;color:#C9CFD8;display:grid;gap:6px}
+  input,select,textarea{font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:10px;border:1px solid #3A475C;background:#121A27;color:var(--paper);outline:none;width:100%}
+  input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+  textarea{resize:vertical;min-height:100px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  form .btn{justify-content:center;border:0;width:100%}
+
+  .faqs{display:grid;gap:12px;margin-top:36px;max-width:860px}
+  .faq{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 22px}
+  .faq summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:600;font-size:16.5px;display:flex;justify-content:space-between;gap:16px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-family:var(--serif);font-size:24px;line-height:1;color:var(--accent-2)}
+  .faq[open] summary::after{content:"–"}
+  .faq p{padding:0 0 18px;color:var(--ink-2);font-size:15.5px}
+  footer{background:#0F1722;color:#9AA4B2;padding:30px 0;font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer a{color:#C9CFD8;text-decoration:none}
+
+  .wa-float{position:fixed;right:20px;bottom:20px;z-index:60;width:58px;height:58px;border-radius:50%;background:#1F7A4D;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(0,0,0,.45);transition:transform .15s}
+  .wa-float:hover{transform:scale(1.07)}
+  .wa-float svg{width:30px;height:30px;fill:#fff}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+  @media (max-width:980px){
+    .hero-grid,.about,.contact-grid{grid-template-columns:1fr}
+    .receipt{max-width:420px;margin:0 auto}
+    .prod-grid{grid-template-columns:1fr}
+    .prod.feature{grid-column:auto;grid-template-columns:1fr}
+    .proj-grid{grid-template-columns:1fr 1fr}
+    .svc-grid{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .strip .wrap{grid-template-columns:1fr 1fr}
+    .stat:nth-child(2){border-right:0}
+    .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  }
+  @media (max-width:760px){
+    section{padding:72px 0}
+    .nav-links{position:fixed;inset:70px 0 auto 0;flex-direction:column;gap:0;background:var(--paper);border-bottom:1px solid var(--line);padding:8px 24px 20px;display:none}
+    .nav-links.open{display:flex}
+    .nav-links li{width:100%}
+    .nav-links a{display:block;padding:13px 0;border-bottom:1px solid var(--line)}
+    .nav-links .btn{margin-top:14px;justify-content:center;border-bottom:1.5px solid var(--ink)}
+    .burger{display:block}
+    .proj-grid,.svc-grid,.steps,.points,.two{grid-template-columns:1fr}
+  }
+</style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">ED<span> Solutions</span></a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#process">Process</a></li>
-                <li><a href="#why">Why Us</a></li>
-                <li><a href="#testimonials">Reviews</a></li>
-                <li><a href="#contact" class="nav-cta">Get Quote</a></li>
-            </ul>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-bg">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-            <div class="grid-overlay"></div>
-        </div>
-        <div class="hero-content">
-            <div class="hero-text">
-                <div class="hero-badge">
-                    <span class="dot"></span>
-                    Available for new projects
-                </div>
-                <h1>Custom Software<br><span class="highlight">Built for Your</span><br>Business Needs</h1>
-                <p>We craft tailor-made software solutions for small businesses. No templates, no compromises &mdash; just powerful tools designed around your unique workflow.</p>
-                <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">
-                        Start Your Project
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="#services" class="btn btn-outline">Explore Services</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <h3>50+</h3>
-                        <p>Projects Delivered</p>
-                    </div>
-                    <div class="stat">
-                        <h3>100%</h3>
-                        <p>Custom Built</p>
-                    </div>
-                    <div class="stat">
-                        <h3>24/7</h3>
-                        <p>Support</p>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="code-window">
-                    <div class="code-header">
-                        <div class="code-dot red"></div>
-                        <div class="code-dot yellow"></div>
-                        <div class="code-dot green"></div>
-                    </div>
-                    <div class="code-body" id="codeBody">
-                        <span class="comment">// Your custom solution</span><br>
-                        <span class="keyword">const</span> <span class="function">solution</span> = <span class="bracket">{</span><br>
-                        &nbsp;&nbsp;business: <span class="string">"Your Business"</span>,<br>
-                        &nbsp;&nbsp;type: <span class="string">"Custom Software"</span>,<br>
-                        &nbsp;&nbsp;scalable: <span class="keyword">true</span>,<br>
-                        &nbsp;&nbsp;support: <span class="string">"24/7"</span>,<br>
-                        &nbsp;&nbsp;built_by: <span class="string">"ED Solutions"</span><br>
-                        <span class="bracket">}</span>;<br><br>
-                        <span class="function">deploy</span>(solution); <span class="comment">// &#x1F680;</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section id="services">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Our Services</span>
-                <h2>Solutions That Power Your Growth</h2>
-                <p>From billing systems to full ERPs, we build software that fits your business like a glove.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card reveal">
-                    <div class="service-icon">&#x1F4CA;</div>
-                    <h3>Business Management Software</h3>
-                    <p>Complete management systems including billing, inventory, student management, and more &mdash; all customized to your workflow.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">&#x1F310;</div>
-                    <h3>Web Applications</h3>
-                    <p>Modern, responsive web apps that your team and customers can access from anywhere. Built with the latest technologies.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">&#x1F4F1;</div>
-                    <h3>Mobile-Friendly Solutions</h3>
-                    <p>Apps and systems that work seamlessly on phones and tablets, so your business stays connected on the go.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">&#x2699;&#xFE0F;</div>
-                    <h3>Automation & Integration</h3>
-                    <p>Automate repetitive tasks and integrate your existing tools. Save hours every week with smart workflows.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">&#x1F4DD;</div>
-                    <h3>Billing & Invoice Systems</h3>
-                    <p>Custom billing, receipt, and invoice generation systems tailored to your industry and compliance needs.</p>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">&#x1F6E0;&#xFE0F;</div>
-                    <h3>Maintenance & Support</h3>
-                    <p>Ongoing support, updates, and enhancements. We don't just build &mdash; we stand by our work.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-image reveal">
-                    <div class="about-card">
-                        <div class="profile-icon">TE</div>
-                        <h3>Thomas Alva Edison Sarazin M</h3>
-                        <p class="role">Founder & Lead Developer</p>
-                        <div class="contact-row">
-                            <span>&#x1F4F1;</span>
-                            <span>+91 97916 31215</span>
-                        </div>
-                        <div class="contact-row">
-                            <span>&#x2709;&#xFE0F;</span>
-                            <span>thomasalvaedisonsarazin@gmail.com</span>
-                        </div>
-                        <div class="contact-row">
-                            <span>&#x1F4BC;</span>
-                            <span>ED Solutions &mdash; Proprietor</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-text reveal">
-                    <span class="section-tag">About Us</span>
-                    <h2>Software Crafted with Care for Small Businesses</h2>
-                    <p>At ED Solutions, we believe every small business deserves software that works exactly the way they do. We don't force you into rigid templates &mdash; we listen, understand, and build.</p>
-                    <p>Led by Thomas Alva Edison Sarazin M, our mission is simple: deliver powerful, affordable, and fully customized software that helps your business run smarter.</p>
-                    <ul class="about-features">
-                        <li><span class="check">&#x2713;</span> 100% Custom-Built Solutions</li>
-                        <li><span class="check">&#x2713;</span> Affordable Pricing for Small Business</li>
-                        <li><span class="check">&#x2713;</span> Direct Communication with Developer</li>
-                        <li><span class="check">&#x2713;</span> Fast Turnaround & Ongoing Support</li>
-                        <li><span class="check">&#x2713;</span> Google Sheets & Cloud-Based Options</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-primary">Let's Talk</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section id="process">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">How We Work</span>
-                <h2>From Idea to Launch in 4 Steps</h2>
-                <p>A simple, transparent process that keeps you in control at every stage.</p>
-            </div>
-            <div class="process-steps">
-                <div class="step reveal">
-                    <div class="step-number">01</div>
-                    <h3>Discovery Call</h3>
-                    <p>We listen to your business needs, challenges, and goals to understand exactly what you require.</p>
-                </div>
-                <div class="step reveal">
-                    <div class="step-number">02</div>
-                    <h3>Design & Plan</h3>
-                    <p>We create a blueprint of your software, showing you how it will look and work before writing a single line of code.</p>
-                </div>
-                <div class="step reveal">
-                    <div class="step-number">03</div>
-                    <h3>Build & Test</h3>
-                    <p>Our team develops your solution and rigorously tests it to ensure everything works perfectly.</p>
-                </div>
-                <div class="step reveal">
-                    <div class="step-number">04</div>
-                    <h3>Deploy & Support</h3>
-                    <p>We launch your software, train your team, and provide ongoing support to keep things running smooth.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- WHY CHOOSE US -->
-    <section id="why">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Why ED Solutions</span>
-                <h2>What Sets Us Apart</h2>
-                <p>We're not a big faceless agency. We're a dedicated partner who understands small business inside out.</p>
-            </div>
-            <div class="why-grid">
-                <div class="why-card reveal">
-                    <div class="icon">&#x1F3AF;</div>
-                    <h3>Tailored, Not Templated</h3>
-                    <p>Every line of code is written specifically for your business. No cookie-cutter solutions, no unnecessary features you'll never use.</p>
-                </div>
-                <div class="why-card reveal">
-                    <div class="icon">&#x1F4B0;</div>
-                    <h3>Budget-Friendly</h3>
-                    <p>Enterprise-quality software at prices that make sense for small businesses. We work within your budget without cutting corners.</p>
-                </div>
-                <div class="why-card reveal">
-                    <div class="icon">&#x1F91D;</div>
-                    <h3>Direct Access</h3>
-                    <p>You talk directly to the developer. No middlemen, no ticket queues. Fast responses and clear communication, always.</p>
-                </div>
-                <div class="why-card reveal">
-                    <div class="icon">&#x1F504;</div>
-                    <h3>Flexible & Scalable</h3>
-                    <p>Start small and grow. Our solutions are built to scale with your business, with easy customization as your needs evolve.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section id="testimonials">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Client Love</span>
-                <h2>Trusted by Small Businesses</h2>
-                <p>Real feedback from businesses we've helped transform with custom software.</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card reveal">
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                    <blockquote>"ED Solutions built us a complete billing system that perfectly matches our workflow. The turnaround was incredibly fast and support has been outstanding."</blockquote>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">RK</div>
-                        <div>
-                            <h4>Rajesh Kumar</h4>
-                            <p>Retail Store Owner</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal">
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                    <blockquote>"We needed a school management system on a tight budget. Edison understood our needs perfectly and delivered beyond expectations. Highly recommended!"</blockquote>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">PS</div>
-                        <div>
-                            <h4>Priya Shankar</h4>
-                            <p>School Administrator</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card reveal">
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                    <blockquote>"The custom inventory tracker saved us hours of manual work every day. It's simple to use and does exactly what we need. Great value for the price."</blockquote>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">AM</div>
-                        <div>
-                            <h4>Anand Murthy</h4>
-                            <p>Wholesale Distributor</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content reveal">
-                <h2>Ready to Build Your Dream Software?</h2>
-                <p>Let's discuss your business needs and create a solution that works perfectly for you.</p>
-                <div class="cta-buttons">
-                    <a href="#contact" class="btn btn-white">
-                        Get Free Consultation
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="tel:+919791631215" class="btn btn-outline">Call Now: +91 97916 31215</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Contact Us</span>
-                <h2>Let's Start Building</h2>
-                <p>Tell us about your project and we'll get back to you within 24 hours.</p>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-info reveal">
-                    <h3>Get in Touch</h3>
-                    <p>Have a project in mind? We'd love to hear about it. Reach out to us directly or fill in the form &mdash; we respond fast.</p>
-                    <div class="contact-item">
-                        <div class="contact-icon">&#x1F4F1;</div>
-                        <div>
-                            <h4>Phone / WhatsApp</h4>
-                            <p><a href="tel:+919791631215">+91 97916 31215</a></p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">&#x2709;&#xFE0F;</div>
-                        <div>
-                            <h4>Email</h4>
-                            <p><a href="mailto:thomasalvaedisonsarazin@gmail.com">thomasalvaedisonsarazin@gmail.com</a></p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">&#x1F4CD;</div>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Pondicherry, India</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">&#x23F0;</div>
-                        <div>
-                            <h4>Business Hours</h4>
-                            <p>Mon - Sat: 9:00 AM - 8:00 PM</p>
-                        </div>
-                    </div>
-                </div>
-                <form class="contact-form reveal" id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" placeholder="john@example.com" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" placeholder="+91 98765 43210">
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Service Needed</label>
-                            <select id="service">
-                                <option value="">Select a service</option>
-                                <option value="business-mgmt">Business Management Software</option>
-                                <option value="web-app">Web Application</option>
-                                <option value="billing">Billing & Invoice System</option>
-                                <option value="automation">Automation & Integration</option>
-                                <option value="mobile">Mobile-Friendly Solution</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Tell Us About Your Project</label>
-                        <textarea id="message" placeholder="Describe your business needs and what you're looking for..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-submit">
-                        Send Message
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="#" class="logo">ED<span> Solutions</span></a>
-                    <p>Custom software solutions built with care for small businesses. We turn your ideas into powerful tools that drive growth.</p>
-                    <div class="social-links">
-                        <a href="mailto:thomasalvaedisonsarazin@gmail.com" title="Email">&#x2709;</a>
-                        <a href="tel:+919791631215" title="Call">&#x1F4DE;</a>
-                        <a href="https://wa.me/919791631215" title="WhatsApp" target="_blank" rel="noopener">&#x1F4AC;</a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Services</h4>
-                    <ul>
-                        <li><a href="#services">Business Software</a></li>
-                        <li><a href="#services">Web Applications</a></li>
-                        <li><a href="#services">Billing Systems</a></li>
-                        <li><a href="#services">Automation</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#process">Our Process</a></li>
-                        <li><a href="#testimonials">Testimonials</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><a href="tel:+919791631215">+91 97916 31215</a></li>
-                        <li><a href="mailto:thomasalvaedisonsarazin@gmail.com">Email Us</a></li>
-                        <li><a href="https://wa.me/919791631215" target="_blank" rel="noopener">WhatsApp</a></li>
-                        <li><a href="#contact">Get a Quote</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 ED Solutions. All rights reserved.</p>
-                <p>Crafted with &#x2764; by ED Solutions, Pondicherry</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/919791631215?text=Hi%20ED%20Solutions!%20I'm%20interested%20in%20custom%20software%20for%20my%20business."
-       class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
-        &#x1F4AC;
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="brand" aria-label="ED Solutions home">
+      <span class="mark">ED</span>
+      <span><b>ED Solutions</b><small>PUDUCHERRY · TAMIL NADU</small></span>
     </a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact" class="btn btn-dark">Contact me</a></li>
+    </ul>
+  </div>
+</nav>
 
-    <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-        });
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow">Custom software · Puducherry</span>
+      <h1>Software for <em>schools, shops</em> and restaurants — built by an accountant who codes.</h1>
+      <p class="lead">Fee billing, mark entry and rank cards, grocery POS with stock and expiry alerts, restaurant billing, and AI tools. In Tamil and English, built around how your office already works.</p>
+      <p class="ta-line" lang="ta">பள்ளி கட்டண பில்லிங் · மதிப்பெண் பதிவு &amp; ரேங்க் கார்டு · மளிகைக் கடை பில்லிங் · உணவக பில்லிங் — தமிழிலும் ஆங்கிலத்திலும்.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-wa" href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%20saw%20the%20ED%20Solutions%20website.%20I%27d%20like%20a%20demo." target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1.9 2 1.2 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
+          Ask for a free demo
+        </a>
+        <a class="btn btn-ghost" href="#projects">See my work</a>
+      </div>
+      <div class="hero-tags">
+        <span class="tag">Fee billing</span><span class="tag">Mark entry</span><span class="tag">Grocery POS</span><span class="tag">Restaurant billing</span><span class="tag">Android app</span><span class="tag">AI &amp; RAG</span><span class="tag">n8n automation</span>
+      </div>
+    </div>
 
-        // Mobile menu
-        document.getElementById('hamburger').addEventListener('click', function() {
-            document.getElementById('navLinks').classList.toggle('active');
-        });
+    <div class="reveal" aria-hidden="true">
+      <div class="receipt">
+        <div class="rh"><b>Murugan Provisions</b><span class="ta">முருகன் ஸ்டோர்ஸ் · Bill #A-0142</span></div>
+        <div class="row"><span>Ponni rice · 5 kg</span><span>₹ 340.00</span></div>
+        <div class="row"><span>Toor dal · 750 g</span><span>₹ 112.50</span></div>
+        <div class="row"><span>Gingelly oil · 1 L</span><span>₹ 285.00</span></div>
+        <div class="row"><span>Biscuit pkt × 6 (tier)</span><span>₹ 108.00</span></div>
+        <div class="row tot"><span>TOTAL</span><span>₹ 845.50</span></div>
+        <div class="row"><span>Credit balance</span><span>₹ 1,240.00</span></div>
+        <span class="stamp">PAID · UPI</span>
+        <div class="alert">⚠ Low stock: Toor dal (2.1 kg) · 3 items expire in 7 days</div>
+      </div>
+    </div>
+  </div>
+</header>
 
-        // Close mobile menu on link click
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-            });
-        });
+<!-- ============ STRIP ============ -->
+<div class="strip">
+  <div class="wrap">
+    <div class="stat"><b>10+ yrs</b><span>in accounting, so the reports actually balance</span></div>
+    <div class="stat"><b>15+</b><span>public projects you can open on GitHub</span></div>
+    <div class="stat"><b>தமிழ் + EN</b><span>bilingual screens and receipts</span></div>
+    <div class="stat"><b>1 person</b><span>you talk to directly, no middlemen</span></div>
+  </div>
+</div>
 
-        // Scroll reveal
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.15 });
+<!-- ============ PRODUCTS ============ -->
+<section id="products">
+  <div class="wrap">
+    <span class="eyebrow">Products</span>
+    <h2>School, shop &amp; restaurant software I build and sell</h2>
+    <p class="lead">Ready-made products I customise for each client. Every one comes with a free demo before you pay anything.</p>
 
-        revealElements.forEach(el => revealObserver.observe(el));
+    <div class="prod-grid">
 
-        // Contact form
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const service = document.getElementById('service').value;
-            const message = document.getElementById('message').value;
+      <!-- PTA — feature -->
+      <article class="prod feature reveal">
+        <div>
+          <div class="p-top">
+            <div class="p-icon">📱</div>
+            <span class="badge b-dev">In development</span>
+          </div>
+          <h3>Personal Teacher Assistant — 10th Std</h3>
+          <div class="p-for">For 10th standard students & parents · Android app</div>
+          <p class="p-desc">A study companion for SSLC students. The syllabus is split into subject → chapter → topic. A student finishes one topic at a time: watch the lesson, tap <em>"Not clear"</em> for a fresh explanation in a different style, then pass a quiz (60%) to unlock the next topic.</p>
+          <ul>
+            <li>Tamil Nadu State Board (Samacheer Kalvi), English &amp; Tamil medium</li>
+            <li>AI re-explains in a new style: analogy, story, step-by-step, worked example</li>
+            <li>New quiz questions on every attempt</li>
+            <li>Parent progress view and an admin panel for teachers</li>
+          </ul>
+          <div class="p-actions">
+            <a href="https://github.com/thomasalvaedisonsarazin/Class-10-Personal-Teacher-Assistant" target="_blank" rel="noopener">View on GitHub ↗</a>
+            <a href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%27m%20interested%20in%20the%20Personal%20Teacher%20Assistant%20app." target="_blank" rel="noopener">Get early access</a>
+          </div>
+        </div>
+        <div class="pta-phone" aria-hidden="true">
+          <div class="pta-screen">
+            <div class="hi">Vanakkam, Priya 👋</div>
+            <div class="sub">Next: Science · Light — Refraction</div>
+            <div class="bar"><i></i></div>
+            <div class="tiles">
+              <div class="tile t1">தமிழ்<small>8 / 14 topics</small></div>
+              <div class="tile t2">English<small>11 / 16</small></div>
+              <div class="tile t3">Maths<small>6 / 22</small></div>
+              <div class="tile t4">Science<small>in progress</small></div>
+              <div class="tile t5">Social<small>🔒 locked</small></div>
+              <div class="tile t6">Revision<small>🔒 locked</small></div>
+            </div>
+          </div>
+        </div>
+      </article>
 
-            const whatsappMsg = encodeURIComponent(
-                `Hi ED Solutions!\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${service}\n\nMessage:\n${message}`
-            );
+      <!-- Mark entry -->
+      <article class="prod reveal">
+        <div class="p-top"><div class="p-icon">🎓</div><span class="badge b-live">Live in a school</span></div>
+        <h3>Mark Entry &amp; Rank Card System</h3>
+        <div class="p-for">For schools · Nursery to Class XII</div>
+        <p class="p-desc">Teachers enter marks from their phone, and the office prints rank cards, rank lists and parent-sign sheets in minutes.</p>
+        <ul>
+          <li>Rank cards with school logo, student photo and HM signature</li>
+          <li>9-point grades plus the FA/SA register for government records</li>
+          <li>Per-class subjects, bulk photo upload, Excel reports</li>
+          <li>Installable app for teachers, on the school's own domain</li>
+        </ul>
+        <div class="p-actions"><a href="https://wa.me/919791631215?text=Hi%20Edison%2C%20please%20show%20me%20a%20demo%20of%20the%20Mark%20Entry%20%26%20Rank%20Card%20System." target="_blank" rel="noopener">Book a demo</a></div>
+      </article>
 
-            window.open(`https://wa.me/919791631215?text=${whatsappMsg}`, '_blank');
+      <!-- Fee billing -->
+      <article class="prod reveal">
+        <div class="p-top"><div class="p-icon">🧾</div><span class="badge b-dev">In development</span></div>
+        <h3>School Fee Billing Software</h3>
+        <div class="p-for">For schools with hostel / boarding</div>
+        <p class="p-desc">Fee collection that matches how school offices really work: several bill books, term, monthly and yearly fees, concessions and arrears.</p>
+        <ul>
+          <li>Separate receipt books: School, Depo, Hostel, Boarding</li>
+          <li>Fee structure → generate dues → collect → A5 receipt</li>
+          <li>Year-wise arrears per fee head, staff-ward concessions</li>
+          <li>Principal approval for write-offs and cancellations</li>
+        </ul>
+        <div class="p-actions"><a href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%27d%20like%20to%20know%20more%20about%20the%20School%20Fee%20Billing%20software." target="_blank" rel="noopener">Talk to me</a></div>
+      </article>
 
-            this.reset();
-            alert('Thank you! Your message is being sent via WhatsApp. We\'ll get back to you within 24 hours.');
-        });
+      <!-- POS -->
+      <article class="prod reveal">
+        <div class="p-top"><div class="p-icon">🛒</div><span class="badge b-live">Free trial available</span></div>
+        <h3>Grocery &amp; Provisions Billing (POS)</h3>
+        <div class="p-for">For kirana, provisions and supermarkets</div>
+        <p class="p-desc">Billing and stock together, in Tamil or English. Sell loose by the gram or by the packet, and see what's running low before customers ask.</p>
+        <ul>
+          <li>Barcode or manual billing; kg / g / packet items</li>
+          <li>Purchase stock-in, batch expiry and low-stock alerts</li>
+          <li>Quantity price tiers (wholesale / retail)</li>
+          <li>PIN-protected void and delete</li>
+        </ul>
+        <div class="p-actions"><a href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%27d%20like%20a%20free%20trial%20of%20the%20Grocery%20POS." target="_blank" rel="noopener">Start free trial</a></div>
+      </article>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
+      <!-- Restaurant -->
+      <article class="prod reveal">
+        <div class="p-top"><div class="p-icon">🍽️</div><span class="badge b-live">Ready to deploy</span></div>
+        <h3>Restaurant &amp; Canteen Billing Software</h3>
+        <div class="p-for">For messes, canteens and restaurants</div>
+        <p class="p-desc">Take orders and print bills from several devices at once, with an admin panel and daily sales reports for the owner.</p>
+        <ul>
+          <li>Multi-device order taking</li>
+          <li>Admin panel for menu and prices</li>
+          <li>Daily and item-wise sales reports</li>
+        </ul>
+        <div class="p-actions"><a href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%27d%20like%20a%20demo%20of%20the%20Restaurant%20Billing%20software." target="_blank" rel="noopener">Book a demo</a></div>
+      </article>
 
-        // Typing effect for code window
-        const codeLines = [
-            { text: '// Your custom solution', class: 'comment' },
-            { text: 'const ', class: 'keyword', append: [{ text: 'solution', class: 'function' }, { text: ' = {', class: 'bracket' }] },
-        ];
-    </script>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects">
+  <div class="wrap">
+    <span class="eyebrow">Projects</span>
+    <h2>Everything I've built</h2>
+    <p class="lead">Client software, AI apps, automations and experiments. Projects marked GitHub are open, so you can read the code yourself.</p>
+
+    <div class="filters" role="tablist" aria-label="Filter projects">
+      <button class="on" data-f="all">All</button>
+      <button data-f="edu">Education</button>
+      <button data-f="biz">Business</button>
+      <button data-f="ai">AI &amp; RAG</button>
+      <button data-f="auto">Automation</button>
+      <button data-f="lab">Learning lab</button>
+    </div>
+
+    <div class="proj-grid" id="projGrid">
+
+      <article class="proj" data-c="edu ai">
+        <div class="row1"><span class="cat">Education · Android</span><span class="badge b-dev">In dev</span></div>
+        <h3>Personal Teacher Assistant (PTA)</h3>
+        <p>Topic-by-topic SSLC study app with AI re-explanations and unlock-by-quiz progress.</p>
+        <div class="stack"><span>React Native</span><span>Expo</span><span>FastAPI</span><span>PostgreSQL</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/Class-10-Personal-Teacher-Assistant" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="edu ai">
+        <div class="row1"><span class="cat">Education · AI</span><span class="badge b-proto">Prototype</span></div>
+        <h3>EduGuardian AI</h3>
+        <p>Upload marks, and AI agents check data quality, find students who need support and draft intervention plans that teachers approve.</p>
+        <div class="stack"><span>Multi-agent</span><span>FastAPI</span><span>Docker</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/EduGuardian.AI" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="edu biz">
+        <div class="row1"><span class="cat">Education · Client</span><span class="badge b-live">Live</span></div>
+        <h3>Mark Entry &amp; Rank Card System</h3>
+        <p>Phone mark entry, rank cards with photos, FA/SA register. Running at a school in Cuddalore.</p>
+        <div class="stack"><span>Python</span><span>VPS</span><span>Google sign-in</span></div>
+        <a class="go muted" href="#contact">Private · demo on request</a>
+      </article>
+
+      <article class="proj" data-c="edu biz">
+        <div class="row1"><span class="cat">Education · Client</span><span class="badge b-dev">In dev</span></div>
+        <h3>School Fee Billing</h3>
+        <p>Multi-book receipts, hostel and boarding fees, year-wise arrears and concessions.</p>
+        <div class="stack"><span>Web app</span><span>A5 receipts</span></div>
+        <a class="go muted" href="#contact">Private · demo on request</a>
+      </article>
+
+      <article class="proj" data-c="biz ai">
+        <div class="row1"><span class="cat">Business · Hackathon</span><span class="badge b-proto">Prototype</span></div>
+        <h3>Kirana Ledger Agent</h3>
+        <p>Photo of a handwritten bill or a Tamil voice note becomes a customer and supplier ledger. Built for the Meta Global AI Developer Hackathon.</p>
+        <div class="stack"><span>Meta Muse Spark</span><span>Apps Script</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/kirana-ledger-agent" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="biz">
+        <div class="row1"><span class="cat">Business · Restaurant</span><span class="badge b-proto">Prototype</span></div>
+        <h3>DineOps SI — Table Management</h3>
+        <p>Live table board, drag-and-drop floor plan, waiter and cleaning alerts by WhatsApp/SMS, waitlist and peak-hour analytics.</p>
+        <div class="stack"><span>React</span><span>FastAPI</span><span>Twilio</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/Hotel_Table_SI_Management" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="biz">
+        <div class="row1"><span class="cat">Business · Retail</span><span class="badge b-live">Free trial</span></div>
+        <h3>Provisions &amp; Grocery POS</h3>
+        <p>Bilingual billing, stock-in, batch expiry, low-stock alerts and quantity price tiers.</p>
+        <div class="stack"><span>Google Apps Script</span><span>Sheets</span></div>
+        <a class="go muted" href="#contact">Private · free trial on request</a>
+      </article>
+
+      <article class="proj" data-c="biz">
+        <div class="row1"><span class="cat">Business · Restaurant</span><span class="badge b-live">Ready</span></div>
+        <h3>Restaurant &amp; Canteen Billing</h3>
+        <p>Multi-device ordering, admin panel and sales reports.</p>
+        <div class="stack"><span>Google Apps Script</span></div>
+        <a class="go muted" href="#contact">Private · demo on request</a>
+      </article>
+
+      <article class="proj" data-c="biz">
+        <div class="row1"><span class="cat">Business · Back office</span><span class="badge b-live">In use</span></div>
+        <h3>Invoice &amp; Accounts Suite</h3>
+        <p>Invoices with seal and logo, client agreements as Doc + PDF, and double-entry books with trial balance and P&amp;L.</p>
+        <div class="stack"><span>Google Apps Script</span><span>Double-entry</span></div>
+        <a class="go muted" href="#contact">Private · demo on request</a>
+      </article>
+
+      <article class="proj" data-c="ai">
+        <div class="row1"><span class="cat">AI · RAG</span><span class="badge b-open">Open source</span></div>
+        <h3>Government Scheme Finder</h3>
+        <p>Search 953 Indian government schemes by state, topic, eligibility and benefit amount, with links to the official records.</p>
+        <div class="stack"><span>Streamlit</span><span>ChromaDB</span><span>RAG</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/government-scheme-rag" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="ai">
+        <div class="row1"><span class="cat">AI · Graph RAG</span><span class="badge b-open">Open source</span></div>
+        <h3>TN Schemes Graph RAG</h3>
+        <p>Tamil Nadu schemes modelled as a knowledge graph for relationship-aware search.</p>
+        <div class="stack"><span>Neo4j</span><span>NetworkX</span><span>Python</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/tn-schemes-graph-rag" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="ai">
+        <div class="row1"><span class="cat">AI · RAG</span><span class="badge b-open">Open source</span></div>
+        <h3>Ask Your PDF / Excel</h3>
+        <p>Upload a PDF or Excel file and ask questions about it in plain language.</p>
+        <div class="stack"><span>LangChain</span><span>FAISS</span><span>Streamlit</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/RAG-APP" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="auto ai">
+        <div class="row1"><span class="cat">Automation · Slack</span><span class="badge b-open">Open source</span></div>
+        <h3>Slack AI Cooking Assistant</h3>
+        <p>Slack bot with message filtering and conversation memory, built as an n8n workflow.</p>
+        <div class="stack"><span>n8n</span><span>OpenAI</span><span>Slack</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/n8n-slack-ai-cooking-assistant" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="auto">
+        <div class="row1"><span class="cat">Automation · ETL</span><span class="badge b-open">Open source</span></div>
+        <h3>Student Data ETL with AI</h3>
+        <p>Cleans raw student enrolment data, validates emails and splits records by city and payment status.</p>
+        <div class="stack"><span>n8n</span><span>IF nodes</span><span>CSV / Excel</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/ETL-Automation-If-Node-" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="auto">
+        <div class="row1"><span class="cat">Automation · Email</span><span class="badge b-open">Open source</span></div>
+        <h3>Google Sheets → Gmail</h3>
+        <p>Sends personalised emails automatically from rows in a Google Sheet.</p>
+        <div class="stack"><span>n8n</span><span>Sheets</span><span>Gmail</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/n8n-google-sheets-to-gmail-assignment" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="lab">
+        <div class="row1"><span class="cat">Dev tooling</span><span class="badge b-open">Open source</span></div>
+        <h3>Codex Product Creation Template</h3>
+        <p>Turns a product idea into a scoped plan, working software and a verified handoff with an AI coding agent.</p>
+        <div class="stack"><span>Codex</span><span>Templates</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/Codex_tempelet_for_product_creation" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="lab">
+        <div class="row1"><span class="cat">Learning lab</span><span class="badge b-open">Open source</span></div>
+        <h3>Student Grade System</h3>
+        <p>Mark-to-grade calculator, as a Python script and a Streamlit web app.</p>
+        <div class="stack"><span>Python</span><span>Streamlit</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/student-grade-system-streamlit" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+      <article class="proj" data-c="lab auto">
+        <div class="row1"><span class="cat">Learning lab</span><span class="badge b-open">Open source</span></div>
+        <h3>Python Student ETL</h3>
+        <p>Plain-Python pipeline that cleans and reshapes student records.</p>
+        <div class="stack"><span>Python</span><span>pandas</span></div>
+        <a class="go" href="https://github.com/thomasalvaedisonsarazin/python-student-etl-automation" target="_blank" rel="noopener">GitHub ↗</a>
+      </article>
+
+    </div>
+
+    <p class="gh-note">Client software is kept private to protect school and shop data. Ask me on WhatsApp for a live demo. All my public code is on <a href="https://github.com/thomasalvaedisonsarazin" target="_blank" rel="noopener">github.com/thomasalvaedisonsarazin ↗</a></p>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section id="services">
+  <div class="wrap">
+    <span class="eyebrow">Services</span>
+    <h2>Need something that isn't listed?</h2>
+    <p class="lead">I also build custom software from scratch. Bring me the register, bill book or Excel sheet you use today and I'll turn it into software.</p>
+    <div class="svc-grid">
+      <div class="svc reveal"><span class="n">01</span><h3>Billing &amp; receipts</h3><p>Invoices, fee receipts, GST or non-GST bills, printed in your format.</p></div>
+      <div class="svc reveal"><span class="n">02</span><h3>Stock &amp; ledgers</h3><p>Inventory, expiry, customer credit and supplier payables, with aging.</p></div>
+      <div class="svc reveal"><span class="n">03</span><h3>School systems</h3><p>Marks, rank cards, admissions, certificates and fee collection.</p></div>
+      <div class="svc reveal"><span class="n">04</span><h3>Mobile apps</h3><p>Installable Android apps for staff, teachers, students and parents.</p></div>
+      <div class="svc reveal"><span class="n">05</span><h3>AI assistants</h3><p>Chat with your documents, read bills from photos, Tamil voice input.</p></div>
+      <div class="svc reveal"><span class="n">06</span><h3>Automation</h3><p>n8n workflows: Sheets, Gmail, WhatsApp and Slack, so repetitive work runs itself.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section id="process" style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow">How it works</span>
+    <h2>From your bill book to working software</h2>
+    <div class="steps">
+      <div class="step reveal"><h3>Show me how you work</h3><p>A call or visit. I look at your receipts, registers and Excel sheets.</p></div>
+      <div class="step reveal"><h3>Free demo</h3><p>You see a working demo with your own data before you pay anything.</p></div>
+      <div class="step reveal"><h3>Build &amp; train</h3><p>I set it up, load your data and train your staff on it.</p></div>
+      <div class="step reveal"><h3>Maintain</h3><p>Defects are fixed free for 30 days. After that, a yearly maintenance plan.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" style="padding-top:0">
+  <div class="wrap about">
+    <aside class="who reveal">
+      <div class="avatar">TE</div>
+      <h3>Thomas Alva Edison Sarazin M</h3>
+      <div class="role">Founder &amp; developer, ED Solutions</div>
+      <dl>
+        <div><dt>Background</dt><dd>B.Com · 10+ years in accounting</dd></div>
+        <div><dt>Based in</dt><dd>Puducherry · serving Tamil Nadu</dd></div>
+        <div><dt>GitHub</dt><dd><a href="https://github.com/thomasalvaedisonsarazin" target="_blank" rel="noopener">thomasalvaedisonsarazin</a></dd></div>
+        <div><dt>Languages</dt><dd>Tamil · English</dd></div>
+      </dl>
+    </aside>
+    <div class="about-text reveal">
+      <span class="eyebrow">About</span>
+      <h2>An accountant first, then a developer.</h2>
+      <p>I've spent more than ten years in accounting, and I still work in a school accounts office. I see every day where fee collection, mark registers and shop credit books go wrong. <strong>ED Solutions grew out of fixing those problems for real offices.</strong></p>
+      <p>That's why my software starts from your bill book, not from a template. The receipts look like the ones your staff already know, and the totals tie out the way an auditor expects.</p>
+      <div class="points">
+        <div class="point"><b>Direct to the developer</b>No call centre. You WhatsApp the person who wrote the code.</div>
+        <div class="point"><b>Demo before payment</b>See it working with your data first.</div>
+        <div class="point"><b>Tamil + English</b>Screens and receipts your staff can read.</div>
+        <div class="point"><b>Your data stays yours</b>Export to Excel any time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow">FAQ</span>
+    <h2>Questions schools and shop owners ask</h2>
+    <div class="faqs">
+      <details class="faq"><summary>Does the software work in Tamil?</summary><p>Yes. Screens and receipts can be in Tamil, English or both. The grocery POS has a one-tap Tamil/English switch.</p></details>
+      <details class="faq"><summary>Can I see a demo before I pay?</summary><p>Yes. You get a free working demo, with your own items, students or menu loaded, before you pay anything.</p></details>
+      <details class="faq"><summary>Can you move my existing data from Excel?</summary><p>Yes. Student lists, item lists and customer balances can be imported from Excel or CSV, so you don't start from zero.</p></details>
+      <details class="faq"><summary>What support do I get after installation?</summary><p>Defects are fixed free for 30 days after go-live. After that, support and updates are covered by a yearly maintenance plan.</p></details>
+      <details class="faq"><summary>Which areas do you serve?</summary><p>I'm based in Puducherry and work with schools and shops in Puducherry, Cuddalore, Villupuram, Chennai and the rest of Tamil Nadu. Demos can be in person or online.</p></details>
+      <details class="faq"><summary>Can you build software that isn't on this list?</summary><p>Yes. Show me your current bill book, register or Excel sheet, and I'll tell you honestly whether custom software will save you time.</p></details>
+    </div>
+  </div>
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Does the software work in Tamil?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. Screens and receipts can be in Tamil, English or both. The grocery POS has a one-tap Tamil/English switch."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Can I see a demo before I pay?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. You get a free working demo, with your own items, students or menu loaded, before you pay anything."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Can you move my existing data from Excel?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. Student lists, item lists and customer balances can be imported from Excel or CSV, so you don't start from zero."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What support do I get after installation?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Defects are fixed free for 30 days after go-live. After that, support and updates are covered by a yearly maintenance plan."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Which areas do you serve?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "I'm based in Puducherry and work with schools and shops in Puducherry, Cuddalore, Villupuram, Chennai and the rest of Tamil Nadu. Demos can be in person or online."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Can you build software that isn't on this list?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. Show me your current bill book, register or Excel sheet, and I'll tell you honestly whether custom software will save you time."
+   }
+  }
+ ]
+}
+  </script>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="wrap">
+    <span class="eyebrow">Contact</span>
+    <h2>Tell me what your office needs.</h2>
+    <p class="lead">WhatsApp is the fastest way to reach me. Send a photo of your current bill or register and I'll tell you honestly whether software will help.</p>
+
+    <div class="contact-grid">
+      <div class="c-list">
+        <a class="c-item" href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%20saw%20the%20ED%20Solutions%20website." target="_blank" rel="noopener">
+          <span class="c-ic">💬</span><span><small>WhatsApp</small><b>+91 97916 31215</b></span>
+        </a>
+        <a class="c-item" href="tel:+919791631215">
+          <span class="c-ic">📞</span><span><small>Call</small><b>+91 97916 31215</b></span>
+        </a>
+        <a class="c-item" href="mailto:thomasalvaedisonsarazin@gmail.com?subject=Enquiry%20from%20ED%20Solutions%20website">
+          <span class="c-ic">✉️</span><span><small>Email</small><b>thomasalvaedisonsarazin@gmail.com</b></span>
+        </a>
+        <a class="c-item" href="https://github.com/thomasalvaedisonsarazin" target="_blank" rel="noopener">
+          <span class="c-ic">⌘</span><span><small>GitHub</small><b>github.com/thomasalvaedisonsarazin</b></span>
+        </a>
+      </div>
+
+      <form id="enquiry" novalidate>
+        <h3>Send an enquiry</h3>
+        <p class="hint">This opens WhatsApp with your message ready to send.</p>
+        <div class="two">
+          <label>Your name<input name="name" required placeholder="e.g. Ravi"></label>
+          <label>Business / school<input name="org" placeholder="e.g. Sri Murugan Stores"></label>
+        </div>
+        <label>I'm interested in
+          <select name="need">
+            <option>School fee billing</option>
+            <option>Mark entry &amp; rank cards</option>
+            <option>Grocery / provisions POS</option>
+            <option>Restaurant / canteen billing</option>
+            <option>Personal Teacher Assistant app</option>
+            <option>AI or automation project</option>
+            <option>Something custom</option>
+          </select>
+        </label>
+        <label>Message<textarea name="msg" placeholder="Tell me a little about how you work today…"></textarea></label>
+        <button class="btn btn-wa" type="submit">Send on WhatsApp</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> ED Solutions · Thomas Alva Edison Sarazin M · Puducherry, India · <a href="tel:+919791631215">+91 97916 31215</a></span>
+    <span><a href="#products">Products</a> · <a href="#projects">Projects</a> · <a href="https://github.com/thomasalvaedisonsarazin" target="_blank" rel="noopener">GitHub</a> · <a href="#contact">Contact</a></span>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/919791631215?text=Hi%20Edison%2C%20I%20saw%20the%20ED%20Solutions%20website." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1.9 2 1.2 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>
+</a>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Sticky nav border
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 10); });
+
+  // Mobile menu
+  var burger = document.getElementById('burger'), links = document.getElementById('navLinks');
+  burger.addEventListener('click', function(){
+    var open = links.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ links.classList.remove('open'); burger.setAttribute('aria-expanded', false); }); });
+
+  // Project filters
+  var btns = document.querySelectorAll('.filters button'), cards = document.querySelectorAll('.proj');
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      btns.forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      var f = b.getAttribute('data-f');
+      cards.forEach(function(c){
+        var show = f === 'all' || c.getAttribute('data-c').split(' ').indexOf(f) > -1;
+        c.classList.toggle('hide', !show);
+      });
+    });
+  });
+
+  // Reveal on scroll
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // Enquiry form → WhatsApp
+  document.getElementById('enquiry').addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = e.target;
+    var name = f.name.value.trim();
+    if (!name) { f.name.focus(); f.name.style.borderColor = '#D9542B'; return; }
+    var text = 'Hi Edison, I found ED Solutions online.\n\n' +
+      'Name: ' + name + '\n' +
+      (f.org.value.trim() ? 'Business/School: ' + f.org.value.trim() + '\n' : '') +
+      'Interested in: ' + f.need.value + '\n' +
+      (f.msg.value.trim() ? '\n' + f.msg.value.trim() : '');
+    window.open('https://wa.me/919791631215?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  });
+</script>
 </body>
 </html>

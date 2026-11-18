@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thomasalvaedisonsarazin.github.io/EDCloudSolution/sitemap.xml
